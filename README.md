@@ -16,6 +16,12 @@ rake test
 ruby -I. test/validation_sqlite_test.rb
 ```
 
+# Recommendations
+
+- Use devcontainer to run the project in a container.
+
 # References
 
 https://api.rubyonrails.org/classes/ActiveModel/Validations/ClassMethods.html
+
+https://github.com/jamesbrooks/hash_validator
