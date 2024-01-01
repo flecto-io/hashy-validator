@@ -13,6 +13,7 @@ ActiveRecord::Schema.define do
         t.string :notifications
         
         # @Todo: use Postgres
+        # Also check if i really need to create test with pg integration
         # t.jsonb :notifications
     end
 end
@@ -28,21 +29,50 @@ end
 class Profile < ActiveRecord::Base
     validates :name, presence: true
     validates :notifications, hashy_array: {
-        type: HashValidator.multiple('required', 'string', 'unique', lambda { |v| v > 0 }),
+        type: HashValidator.multiple('required', 'string'),
     }
 end
 
+# I am using JSON.generate is because sqlite3 does not have the jsonb column type
 class HashyArrayValidationTest < Minitest::Test
-    # not working
-    # def test_valid_hashy_returns_error
-    #     profile = Profile.new(name: 'John Doe', notifications: [
-    #       {
-    #         type: 'something'
-    #       }
-    #     ])
-    #
-    #     assert profile.valid?
-    # end
+    def test_valid_hashy_returns_error
+        profile = Profile.new(name: 'John Doe', notifications: JSON.generate(
+          [
+               {
+                 type: 'something'
+               }
+            ]
+        ))
+
+        assert profile.valid?
+    end
+    # This is not working
+    # Check how unique is implemented
+    def test_invalid_not_unique_hashy_returns_error
+        profile = Profile.new(name: 'John Doe', notifications: JSON.generate(
+          [
+                {
+                  type: 'something'
+                },
+                {
+                  type: 'something'
+                },
+            ]
+        ))
+
+        refute profile.valid?
+    end
+    def test_invalid_wrong_type_hashy_returns_error
+        profile = Profile.new(name: 'John Doe', notifications: JSON.generate(
+          [
+            {
+              type: 1
+            },
+          ]
+        ))
+
+        refute profile.valid?
+    end
     def test_invalid_hashy_returns_error
         profile = Profile.new(name: 'John Doe', notifications: [
           {
