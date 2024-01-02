@@ -1,14 +1,24 @@
-Gem::Specification.new do |s|
-    s.name        = 'hashy_validator'
-    s.version     = '0.0.1'
-    s.date        = '2013-12-31'
-    s.summary     = "?"
-    s.description = "?"
-    s.authors     = ["Flecto Team"]
-    s.email       = 'dev@flecto.io'
+Gem::Specification.new do |spec|
+    spec.name        = 'hashy_validator'
+    spec.version     = '0.0.1'
+    spec.date        = '2013-12-31'
+    spec.summary     = "?"
+    spec.description = "?"
+    spec.authors     = ["Flecto Team"]
+    spec.email       = 'dev@flecto.io'
 
-    s.required_ruby_version = '>= 2.0.0'
+    spec.required_ruby_version = '>= 2.0.0'
 
-    s.add_dependency "activerecord", version = "~> 6.0.0"
-    s.add_dependency "hash_validator", version = "~> 1.0.0"
+    spec.add_dependency "activerecord", version = "~> 6.0.0"
+    spec.add_dependency "hash_validator", version = "~> 1.0.0"
+
+    spec.add_development_dependency 'hash_validator', '~> 1.0.0'
+    spec.add_development_dependency 'sqlite3', '~> 1.4'
+    spec.add_development_dependency 'rake', '~> 13.1.0'
+
+    if Gem::Version.new(RUBY_VERSION) < Gem::Version.new("3")
+        spec.add_development_dependency 'minitest', '>= 5.15.0', '< 5.16'
+    else
+        spec.add_development_dependency 'minitest', '>= 5.15.0'
+    end
 end
