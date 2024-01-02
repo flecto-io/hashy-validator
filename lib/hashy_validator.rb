@@ -1,105 +1,86 @@
-require 'hash_validator'
+require "hash_validator"
 
 class HashyArrayValidator < ActiveModel::EachValidator
-  ValidationContext = Struct.new(:record, :attribute, :value, :validations, :boolean_attrs, :unique_attrs)
+    def validate_each(record, attribute, value)
+      # default nil values to empty array
+      value = [] if value.blank?
 
-  def validate_each(record, attribute, value)
-    value = process_value(value)
-    return unless value_is_valid?(record, attribute, value)
-
-    validations = extract_validations(options)
-    boolean_attrs, unique_attrs = extract_boolean_and_unique_attrs(validations)
-
-    context = ValidationContext.new(record, attribute, value, validations, boolean_attrs, unique_attrs)
-    validate_array_entries(context)
-  end
-
-  private
-
-  def process_value(value)
-    value = [] if value.blank?
-    value.is_a?(String) ? parse_json(value) : value
-  end
-
-  def parse_json(value)
-    JSON.parse(value)
-  rescue JSON::ParserError => e
-    record.errors.add(attribute, :invalid)
-    nil
-  end
-
-  def value_is_valid?(record, attribute, value)
-    return false unless value.is_a?(Array)
-
-    unless value.all? { |e| e.is_a?(Hash) }
-      record.errors.add(attribute, :invalid)
-      return false
-    end
-
-    true
-  end
-
-  def extract_validations(options)
-    options.stringify_keys.reject { |_, val| val.is_a?(String) && val == 'unique' }
-  end
-
-  def extract_boolean_and_unique_attrs(validations)
-    boolean_attrs = extract_boolean_attrs(validations)
-    unique_attrs = extract_unique_attrs(validations)
-
-    [boolean_attrs, unique_attrs]
-  end
-
-  def extract_boolean_attrs(validations)
-    validations.select do |val_attr, val|
-      (val.is_a?(HashValidator::Validations::Multiple) && val.validations.include?('boolean')) ||
-        (val.is_a?(String) && val == 'boolean')
-    end.keys
-  end
-
-  def extract_unique_attrs(validations)
-    unique_attrs = {}
-
-    validations.each do |val_attr, val|
-      next unless val.is_a?(HashValidator::Validations::Multiple) && val.validations.include?('unique')
-
-      unique_attrs[val_attr] ||= []
-      new_val = HashValidator::Validations::Multiple.new(val.validations.reject { |v| v == 'unique' })
-      validations[val_attr] = new_val.validations.blank? ? nil : new_val
-    end
-
-    unique_attrs
-  end
-
-  def validate_array_entries(context)
-    context.value.each do |entry|
-      process_boolean_attributes(entry, context.boolean_attrs)
-      process_unique_attributes(context.record, context.attribute, entry, context.unique_attrs)
-      validate_entry_with_hash_validator(context.record, context.attribute, entry, context.validations)
-    end
-  end
-
-  def process_boolean_attributes(entry, boolean_attrs)
-    boolean_attrs.each do |boolean_attr|
-      entry[boolean_attr] = entry[boolean_attr].to_b if entry.key?(boolean_attr)
-    end
-  end
-
-  def process_unique_attributes(record, attribute, entry, unique_attrs)
-    unique_attrs.keys.each do |unique_attr|
-      if unique_attrs[unique_attr].include?(entry[unique_attr])
-        record.errors.add(attribute, "'#{unique_attr}' not unique")
-      else
-        unique_attrs[unique_attr] << entry[unique_attr]
+      # force JSON parsing if object is string
+      if value.is_a?(String)
+        begin
+          value = JSON.parse(value)
+        rescue JSON::ParserError => e
+          record.errors.add(attribute, :invalid)
+          return false
+        end
       end
+
+      unless value.is_a?(Array)
+        record.errors.add(attribute, :not_an_array)
+        return false
+      end
+
+      # make sure entries are hashes before trying to stringify them
+      unless value.all?{ |e| e.is_a?(Hash) }
+        record.errors.add(attribute, :invalid)
+        return false
+      end
+
+      # look for boolean and unique validator entries
+      unique_attrs = {}
+      boolean_attrs = []
+      validations =
+        # force validator keys to be strings
+        options.stringify_keys.map do |val_attr,val|
+          if (val.is_a?(HashValidator::Validations::Multiple) && val.validations.include?('boolean')) || (val.is_a?(String) && val == 'boolean')
+            boolean_attrs << val_attr
+            [val_attr, val]
+          elsif val.is_a?(HashValidator::Validations::Multiple) && val.validations.include?('unique')
+            # if unique key present, then remove that entry (since its not from HashValidator standard) and keep its history
+            unique_attrs[val_attr] ||= []
+            # we have to make a new object to remove the unique entry,
+            # because deleting it directly from the original object (val) would result into deleting the verification forever
+            new_val = HashValidator::Validations::Multiple.new(val.validations.reject{|v| v == 'unique'})
+            # return the value
+            val.validations.blank? ? nil : [val_attr, new_val]
+          elsif val.is_a?(String) && val == 'unique'
+            # same as above but substring
+            unique_attrs[val_attr] ||= []
+            nil
+          else
+            [val_attr, val]
+          end
+        end.compact.to_h
+
+      # force all array entries to have string keys
+      # discard keys that do not have validators
+      value = value.map{ |e| e.stringify_keys.slice(*validations.keys) }
+
+      # we validate each object in the array
+      value.each do |t|
+        # if boolean found as any of the validations we force value to boolean - if present
+        boolean_attrs.each do |boolean_attr|
+          t[boolean_attr] = t[boolean_attr].to_b if t.key?(boolean_attr)
+        end
+
+        # keep track of unique values and add error if needed
+        unique_attrs.keys.each do |unique_attr|
+          if unique_attrs[unique_attr].include?(t[unique_attr])
+            record.errors.add(attribute, "'#{unique_attr}' not unique")
+          else
+            unique_attrs[unique_attr] << t[unique_attr]
+          end
+        end
+
+        # use default hash validator
+        validator = HashValidator.validate(t, validations)
+        unless validator.valid?
+          validator.errors.each { |k,v| record.errors.add(attribute, "'#{k.to_s}' #{v}") }
+        end
+      end
+
+      # update the value even if errors found
+      # we use send write param so we also support attr_accessor attributes
+      record.send("#{attribute}=", value)
     end
   end
-
-  def validate_entry_with_hash_validator(record, attribute, entry, validations)
-    validator = HashValidator.validate(entry, validations)
-
-    unless validator.valid?
-      validator.errors.each { |k, v| record.errors.add(attribute, "'#{k.to_s}' #{v}") }
-    end
-  end
-end
