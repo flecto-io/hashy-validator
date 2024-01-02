@@ -55,6 +55,13 @@ class HashyArrayValidationTest < Minitest::Test
 
         refute profile.valid?
     end
+    def test_invalid_not_array_hashy_returns_error
+        profile = Profile.new(name: 'John Doe', notifications: JSON.generate(
+            { type: 'something' }
+        ))
+
+        refute profile.valid?
+    end
     def test_invalid_wrong_type_hashy_returns_error
         profile = Profile.new(name: 'John Doe', notifications: JSON.generate(
           [
