@@ -2,9 +2,9 @@ Gem::Specification.new do |spec|
     spec.name        = 'hashy_validator'
     spec.version     = '0.0.1'
     spec.date        = '2013-12-31'
-    spec.summary     = "?"
-    spec.description = "?"
-    spec.authors     = ["Flecto Team"]
+    spec.summary     = 'Custom Active Model validator for validating arrays of hashes'
+    spec.description = 'The hashy_validator gem provides the HashyArrayValidator, a custom Active Model validator designed to validate arrays of hashes within ActiveRecord model attributes. Utilizing the HashValidator gem, on top of hash_validator gem. The gem includes a comprehensive test suite using the minitest framework.'
+    spec.authors     = ['Flecto Team']
     spec.email       = 'dev@flecto.io'
 
     spec.required_ruby_version = '>= 2.0.0'
