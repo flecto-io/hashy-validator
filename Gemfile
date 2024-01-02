@@ -12,3 +12,4 @@ gem "activerecord", "~> 6.0.0"
 gem "sqlite3", "~> 1.4"
 gem "hash_validator", "~> 1.0.0"
 gem 'pry'
+gem 'rake'

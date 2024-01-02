@@ -65,7 +65,7 @@ class HashyArrayValidator < ActiveModel::EachValidator
 
         # keep track of unique values and add error if needed
         unique_attrs.keys.each do |unique_attr|
-          if t[unique_attr].in?(unique_attrs[unique_attr])
+          if unique_attrs[unique_attr].include?(t[unique_attr])
             record.errors.add(attribute, "'#{unique_attr}' not unique")
           else
             unique_attrs[unique_attr] << t[unique_attr]

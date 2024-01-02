@@ -22,7 +22,9 @@ GEM
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
+    rake (13.0.6)
     sqlite3 (1.7.0-aarch64-linux)
+    sqlite3 (1.7.0-arm64-darwin)
     thread_safe (0.3.6)
     tzinfo (1.2.11)
       thread_safe (~> 0.1)
@@ -30,12 +32,14 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  arm64-darwin-23
 
 DEPENDENCIES
   activerecord (~> 6.0.0)
   hash_validator (~> 1.0.0)
   minitest (>= 5.15.0)
   pry
+  rake
   sqlite3 (~> 1.4)
 
 BUNDLED WITH

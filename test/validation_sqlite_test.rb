@@ -22,7 +22,7 @@ end
 class Profile < ActiveRecord::Base
     validates :name, presence: true
     validates :notifications, hashy_array: {
-        type: HashValidator.multiple('required', 'string'),
+        type: HashValidator.multiple('required', 'string', 'unique'),
     }
 end
 
@@ -39,8 +39,6 @@ class HashyArrayValidationTest < Minitest::Test
 
         assert profile.valid?
     end
-    # This is not working
-    # Check how unique is implemented
     def test_invalid_not_unique_hashy_returns_error
         profile = Profile.new(name: 'John Doe', notifications: JSON.generate(
           [
