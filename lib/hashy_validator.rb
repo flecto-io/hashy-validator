@@ -1,6 +1,8 @@
 require 'hash_validator'
 
 class HashyArrayValidator < ActiveModel::EachValidator
+  ValidationContext = Struct.new(:record, :attribute, :value, :validations, :boolean_attrs, :unique_attrs)
+
   def validate_each(record, attribute, value)
     value = process_value(value)
     return unless value_is_valid?(record, attribute, value)
@@ -8,7 +10,8 @@ class HashyArrayValidator < ActiveModel::EachValidator
     validations = extract_validations(options)
     boolean_attrs, unique_attrs = extract_boolean_and_unique_attrs(validations)
 
-    validate_array_entries(record, attribute, value, validations, boolean_attrs, unique_attrs)
+    context = ValidationContext.new(record, attribute, value, validations, boolean_attrs, unique_attrs)
+    validate_array_entries(context)
   end
 
   private
@@ -60,11 +63,11 @@ class HashyArrayValidator < ActiveModel::EachValidator
     [boolean_attrs, unique_attrs]
   end
 
-  def validate_array_entries(record, attribute, value, validations, boolean_attrs, unique_attrs)
-    value.each do |entry|
-      process_boolean_attributes(entry, boolean_attrs)
-      process_unique_attributes(record, attribute, entry, unique_attrs)
-      validate_entry_with_hash_validator(record, attribute, entry, validations)
+  def validate_array_entries(context)
+    context.value.each do |entry|
+      process_boolean_attributes(entry, context.boolean_attrs)
+      process_unique_attributes(context.record, context.attribute, entry, context.unique_attrs)
+      validate_entry_with_hash_validator(context.record, context.attribute, entry, context.validations)
     end
   end
 

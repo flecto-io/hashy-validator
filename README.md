@@ -1,3 +1,7 @@
+<a href="https://codeclimate.com/github/flecto-io/hashy-validator/maintainability"><img src="https://api.codeclimate.com/v1/badges/8818718c3f8ac08a1f05/maintainability" /></a>
+
+<a href="https://codeclimate.com/github/flecto-io/hashy-validator/test_coverage"><img src="https://api.codeclimate.com/v1/badges/8818718c3f8ac08a1f05/test_coverage" /></a>
+
 # Summary
 
 A implementation of hash_validator gem with ActiveModel::Validations.
