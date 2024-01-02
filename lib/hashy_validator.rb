@@ -44,23 +44,31 @@ class HashyArrayValidator < ActiveModel::EachValidator
   end
 
   def extract_boolean_and_unique_attrs(validations)
-    boolean_attrs = []
+    boolean_attrs = extract_boolean_attrs(validations)
+    unique_attrs = extract_unique_attrs(validations)
+
+    [boolean_attrs, unique_attrs]
+  end
+
+  def extract_boolean_attrs(validations)
+    validations.select do |val_attr, val|
+      (val.is_a?(HashValidator::Validations::Multiple) && val.validations.include?('boolean')) ||
+        (val.is_a?(String) && val == 'boolean')
+    end.keys
+  end
+
+  def extract_unique_attrs(validations)
     unique_attrs = {}
 
     validations.each do |val_attr, val|
-      if (val.is_a?(HashValidator::Validations::Multiple) && val.validations.include?('boolean')) || (val.is_a?(String) && val == 'boolean')
-        boolean_attrs << val_attr
-      elsif val.is_a?(HashValidator::Validations::Multiple) && val.validations.include?('unique')
-        unique_attrs[val_attr] ||= []
-        new_val = HashValidator::Validations::Multiple.new(val.validations.reject { |v| v == 'unique' })
-        validations[val_attr] = new_val.validations.blank? ? nil : new_val
-      elsif val.is_a?(String) && val == 'unique'
-        unique_attrs[val_attr] ||= []
-        validations.delete(val_attr)
-      end
+      next unless val.is_a?(HashValidator::Validations::Multiple) && val.validations.include?('unique')
+
+      unique_attrs[val_attr] ||= []
+      new_val = HashValidator::Validations::Multiple.new(val.validations.reject { |v| v == 'unique' })
+      validations[val_attr] = new_val.validations.blank? ? nil : new_val
     end
 
-    [boolean_attrs, unique_attrs]
+    unique_attrs
   end
 
   def validate_array_entries(context)
