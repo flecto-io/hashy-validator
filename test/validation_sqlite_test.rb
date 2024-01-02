@@ -22,7 +22,7 @@ end
 class Profile < ActiveRecord::Base
     validates :name, presence: true
     validates :notifications, hashy_array: {
-        type: HashValidator.multiple('required', 'string'),
+        type: HashValidator.multiple('required', 'string', 'unique'),
     }
 end
 
