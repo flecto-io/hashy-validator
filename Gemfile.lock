@@ -35,7 +35,6 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
-  activemodel (~> 6.0.0)
   activerecord (~> 6.0.0)
   hash_validator (~> 1.0.0)
   minitest (>= 5.15.0)
