@@ -1,30 +1,15 @@
-require "hash_validator"
+require 'hash_validator'
+require_relative './hashy_validator/hashy_value_validator'
 
 class HashyArrayValidator < ActiveModel::EachValidator
     def validate_each(record, attribute, value)
-      # default nil values to empty array
-      value = [] if value.blank?
-
-      # force JSON parsing if object is string
-      if value.is_a?(String)
-        begin
-          value = JSON.parse(value)
-        rescue JSON::ParserError => e
-          record.errors.add(attribute, :invalid)
-          return false
-        end
-      end
-
-      unless value.is_a?(Array)
-        record.errors.add(attribute, :not_an_array)
+      instance_value = HashyValueValidator.new(value)
+      unless instance_value.is_valid
+        record.errors.add(attribute, instance_value.reason)
         return false
       end
 
-      # make sure entries are hashes before trying to stringify them
-      unless value.all?{ |e| e.is_a?(Hash) }
-        record.errors.add(attribute, :invalid)
-        return false
-      end
+      value = instance_value.value
 
       # look for boolean and unique validator entries
       unique_attrs = {}
