@@ -8,6 +8,20 @@
 
 A implementation of hash_validator gem with ActiveModel::Validations.
 
+# Install
+
+<b>THIS GEM IS NOT READY FOR PRODUCTION YET!</b>
+
+### Gemfile
+
+```bash
+gem 'hashy_validator', github: 'flecto-io/hashy-validator'
+```
+
+### RubyGems
+
+<b>Not available yet!</b>
+
 # Test
 
 ### Using Rake
