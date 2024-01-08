@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
     spec.require_paths = ["lib"]
 
     spec.add_dependency "activerecord", ">= 6.0.0", "<= 7.2.0"
-    spec.add_dependency "hash_validator", "~> 1.0.0"
+    spec.add_dependency "hash_validator", "~> 1.1"
 
     spec.add_development_dependency 'hash_validator', '~> 1.0.0'
     spec.add_development_dependency 'sqlite3', '~> 1.4'
