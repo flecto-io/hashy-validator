@@ -7,10 +7,12 @@ Gem::Specification.new do |spec|
     spec.authors     = ['Flecto Team']
     spec.email       = 'dev@flecto.io'
 
+    
     spec.required_ruby_version = '>= 2.0.0'
+    spec.require_paths = ["lib"]
 
-    spec.add_dependency "activerecord", version = "~> 6.0.0"
-    spec.add_dependency "hash_validator", version = "~> 1.0.0"
+    spec.add_dependency "activerecord", ">= 6.0.0", "<= 7.2.0"
+    spec.add_dependency "hash_validator", "~> 1.0.0"
 
     spec.add_development_dependency 'hash_validator', '~> 1.0.0'
     spec.add_development_dependency 'sqlite3', '~> 1.4'
