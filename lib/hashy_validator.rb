@@ -45,7 +45,7 @@ class HashyArrayValidator < ActiveModel::EachValidator
       value.each do |t|
         # if boolean found as any of the validations we force value to boolean - if present
         boolean_attrs.each do |boolean_attr|
-          t[boolean_attr] = t[boolean_attr].to_b if t.key?(boolean_attr)
+          t[boolean_attr] = get_boolean_value(t[boolean_attr]) if t.key?(boolean_attr)
         end
 
         # keep track of unique values and add error if needed
@@ -68,4 +68,13 @@ class HashyArrayValidator < ActiveModel::EachValidator
       # we use send write param so we also support attr_accessor attributes
       record.send("#{attribute}=", value)
     end
+
+    private 
+    
+    def get_boolean_value(value)
+      return true if value == true || value == 'true'
+      return false if value == false || value == 'false'
+      nil
+    end
+
   end

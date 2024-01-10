@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     hashy_validator (0.0.1)
-      activerecord (~> 6.0.0)
-      hash_validator (~> 1.0.0)
+      activerecord (>= 6.0.0, <= 7.2.0)
+      hash_validator (~> 1.1)
 
 GEM
   remote: https://rubygems.org/
@@ -21,7 +21,7 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     concurrent-ruby (1.2.2)
     docile (1.4.0)
-    hash_validator (1.0.0)
+    hash_validator (1.1.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     json (2.7.1)
@@ -44,7 +44,6 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
-  hash_validator (~> 1.0.0)
   hashy_validator!
   minitest (>= 5.15.0)
   rake (~> 13.1.0)
