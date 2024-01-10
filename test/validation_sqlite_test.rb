@@ -70,7 +70,7 @@ class HashyArrayValidationTest < Minitest::Test
 
       assert product.valid?
   end
-  def test_valid_numeric_hashy_returns_error
+  def test_invalid_numeric_hashy_returns_error
     product = Product.new(name: 'IPhone', discount_by_quantity: JSON.generate(
     [
           {
@@ -87,6 +87,11 @@ class HashyArrayValidationTest < Minitest::Test
           }
       ]
     ))
+
+    refute product.valid?
+  end
+  def test_invalid_hash_and_returns_error
+    product = Product.new(name: 'IPhone', discount_by_quantity: 'abacate')
 
     refute product.valid?
   end

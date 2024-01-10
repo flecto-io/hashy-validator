@@ -39,11 +39,4 @@ class HashyValueValidator
         @reason = :not_an_array
       end
     end
-  
-    def check_is_hash
-      unless value.all?{ |e| e.is_a?(Hash) }
-        @valid = false
-        @reason = :invalid
-      end
-    end
   end
