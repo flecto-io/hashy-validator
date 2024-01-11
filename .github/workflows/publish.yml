@@ -2,25 +2,40 @@ name: Publish Gem
 
 on:
   push:
-    tags:
-      - v*
+    branches:
+      - main
+
 jobs:
-  build:
+  release-please:
     runs-on: ubuntu-latest
-    if: contains(github.ref, 'refs/tags/v')
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: GoogleCloudPlatform/release-please-action@v2
+        id: release
+        with:
+          release-type: ruby
+          package-name: hashy_validator
+          bump-minor-pre-major: true
+          version-file: "lib/hashy_validator/version.rb"
+      # Checkout code if release was created
+      - uses: actions/checkout@v2
+        if: ${{ steps.release.outputs.release_created }}
+      # Setup ruby if a release was created
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.4
-      - name: Build Gem
+        if: ${{ steps.release.outputs.release_created }}
+      # Bundle install
+      - run: bundle install
+        if: ${{ steps.release.outputs.release_created }}
+      # Publish
+      - name: publish gem
         run: |
-          rake build
-          rake build:checksum
-      - name: Release Gem
-        uses: cadwallion/publish-rubygems-action@master
+          mkdir -p $HOME/.gem
+          touch $HOME/.gem/credentials
+          chmod 0600 $HOME/.gem/credentials
+          printf -- "---\n:rubygems_api_key: ${GEM_HOST_API_KEY}\n" > $HOME/.gem/credentials
+          gem build *.gemspec
+          gem push *.gem
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
-          RELEASE_COMMAND: rake release
+          GEM_HOST_API_KEY: "${{secrets.RUBYGEMS_API_KEY}}"
+        if: ${{ steps.release.outputs.release_created }}
