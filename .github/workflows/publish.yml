@@ -14,10 +14,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.4
-      - name: Install Dependencies
-        run: |
-          gem install bundler
-          bundle install
       - name: Build Gem
         run: |
           rake build
