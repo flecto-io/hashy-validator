@@ -12,10 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Code Climate coverage reporter is not compatible ([8df1ec3](https://www.github.com/flecto-io/hashy-validator/commit/8df1ec308a940a8f84e01456e1f9d0851c15035b))
 * unique validation ([3c9a6dc](https://www.github.com/flecto-io/hashy-validator/commit/3c9a6dcc02d43cfb81103a52b3632d0d51c0329e))
+- Validation lib
+- Version module
 
 ## [Unreleased]
 
-### Added
+## Fixed
 
-- Validation lib
-- Version module
+- Class::HashValidator not initialized
