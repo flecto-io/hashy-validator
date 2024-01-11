@@ -3,45 +3,58 @@
   <a href="https://codeclimate.com/github/flecto-io/hashy-validator/test_coverage"><img src="https://api.codeclimate.com/v1/badges/8818718c3f8ac08a1f05/test_coverage" /></a>
 </div>
 
+# HashyValidator
 
-# Summary
+HashyValidator is a custom Ruby on Rails validator designed to validate an array of hashes based on [HashValidator](https://github.com/jamesbrooks/hash_validator) criteria but also the following new criteria:
+- `unique`: A value within each hash that has to be unique across the whole array
 
-A implementation of hash_validator gem with ActiveModel::Validations.
 
-# Install
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'hashy_validator'
+```
 
 <b>THIS GEM IS NOT READY FOR PRODUCTION YET!</b>
 
-### Gemfile
+And then execute:
 
 ```bash
-gem 'hashy_validator', github: 'flecto-io/hashy-validator'
+$ bundle install
 ```
 
-### RubyGems
-
-<b>Not available yet!</b>
-
-# Test
-
-### Using Rake
+Or install it yourself as:
 
 ```bash
-rake test
+$ gem install hashy_validator
 ```
 
-### Testing single file 
+## Usage
 
-```bash
-ruby -I. test/validation_sqlite_test.rb
-```
+To leverage HashyValidator in your Rails model, follow these steps:
 
-# Recommendations
+1. Add the gem to your Gemfile and run `bundle install` as mentioned above.
 
-- Use devcontainer to run the project in a container.
+2. In your model, use the `validate` method to apply the `hashy_array` validation.
 
-# References
+   ```ruby
+   class YourModel < ApplicationRecord
+     validates :pricing, hashy_array: {
+       minutes: HashValidator.multiple('required', 'integer', 'unique'),
+       price_cents: HashValidator.multiple('required', 'integer')
+     }
+   end
+   ```
+   
+   Customize each entry validators according to [HashValidator](https://github.com/jamesbrooks/hash_validator) criteria
 
-https://api.rubyonrails.org/classes/ActiveModel/Validations/ClassMethods.html
+## Contributing
 
-https://github.com/jamesbrooks/hash_validator
+Bug reports and pull requests are welcome. This project is intended to be a safe, welcoming space for collaboration. To ease up contribution we provide a VSCode _devcontainer_ to run the project in a container.
+Before submitting a PR do not forget to run all tests by doing `rake test` or against a single file `ruby -I. test/validation_sqlite_test.rb`.
+
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
