@@ -7,12 +7,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    if: contains(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v3
-
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.1
+      - name: Install Dependencies
+        run: |
+          gem install bundler
+          bundle install
+      - name: Build Gem
+        run: |
+          rake build
+          rake build:checksum
       - name: Release Gem
-        if: contains(github.ref, 'refs/tags/v')
         uses: cadwallion/publish-rubygems-action@master
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
