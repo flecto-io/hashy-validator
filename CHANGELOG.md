@@ -5,15 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### [0.1.2](https://www.github.com/flecto-io/hashy-validator/compare/v0.1.1...v0.1.2) (2024-01-13)
-
-
-### Bug Fixes
-
-* organization ([fd2fdf6](https://www.github.com/flecto-io/hashy-validator/commit/fd2fdf66881e4c3f3c5bb133b83730f89d5c667e))
-
 ### [0.1.1](https://www.github.com/flecto-io/hashy-validator/compare/v0.1.0...v0.1.1) (2024-01-11)
-
 
 ### Bug Fixes
 
