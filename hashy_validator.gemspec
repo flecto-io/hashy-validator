@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
     
     spec.required_ruby_version = '>= 2.0.0'
     spec.require_paths = ["lib"]
+    spec.files = Dir["{lib}/**/*"] + ["README.md", "CHANGELOG.md", "Rakefile", "hashy_validator.gemspec"]
 
     spec.add_dependency "activerecord", ">= 6.0.0", "<= 7.2.0"
     spec.add_dependency "hash_validator", "~> 1.1"
