@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hashy_validator (0.0.1)
+    hashy_validator (0.1.2)
       activerecord (>= 6.0.0, <= 7.2.0)
       hash_validator (~> 1.1)
 
@@ -19,14 +19,38 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
+    ast (2.4.2)
     concurrent-ruby (1.2.2)
     docile (1.4.0)
     hash_validator (1.1.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     json (2.7.1)
+    language_server-protocol (3.17.0.3)
     minitest (5.20.0)
+    parallel (1.24.0)
+    parser (3.3.0.3)
+      ast (~> 2.4.1)
+      racc
+    racc (1.7.3)
+    rainbow (3.1.1)
     rake (13.1.0)
+    regexp_parser (2.9.0)
+    rexml (3.2.6)
+    rubocop (1.59.0)
+      json (~> 2.3)
+      language_server-protocol (>= 3.17.0)
+      parallel (~> 1.10)
+      parser (>= 3.2.2.4)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.8, < 3.0)
+      rexml (>= 3.2.5, < 4.0)
+      rubocop-ast (>= 1.30.0, < 2.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 2.4.0, < 3.0)
+    rubocop-ast (1.30.0)
+      parser (>= 3.2.1.0)
+    ruby-progressbar (1.13.0)
     simplecov (0.17.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
@@ -37,6 +61,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.11)
       thread_safe (~> 0.1)
+    unicode-display_width (2.5.0)
     zeitwerk (2.6.12)
 
 PLATFORMS
@@ -47,6 +72,7 @@ DEPENDENCIES
   hashy_validator!
   minitest (>= 5.15.0)
   rake (~> 13.1.0)
+  rubocop (~> 1.59)
   simplecov (= 0.17.1)
   sqlite3 (~> 1.4)
 
