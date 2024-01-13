@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class HashyArrayValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     instance_value = HashyValueValidator.new(value)
-    unless instance_value.is_valid
+    unless instance_value.valid?
       record.errors.add(attribute, instance_value.reason)
       return false
     end
@@ -13,16 +15,19 @@ class HashyArrayValidator < ActiveModel::EachValidator
     boolean_attrs = []
     validations =
       # force validator keys to be strings
-      options.stringify_keys.map do |val_attr,val|
-        if (val.is_a?(HashValidator::Validations::Multiple) && val.validations.include?('boolean')) || (val.is_a?(String) && val == 'boolean')
+      options.stringify_keys.map do |val_attr, val|
+        is_multiple = val.is_a?(HashValidator::Validations::Multiple)
+        if (is_multiple && val.validations.include?('boolean')) || (val.is_a?(String) && val == 'boolean')
           boolean_attrs << val_attr
           [val_attr, val]
-        elsif val.is_a?(HashValidator::Validations::Multiple) && val.validations.include?('unique')
-          # if unique key present, then remove that entry (since its not from HashValidator standard) and keep its history
+        elsif is_multiple && val.validations.include?('unique')
+          # if unique key present, then remove that entry
+          # (since its not from HashValidator standard) and keep its history
           unique_attrs[val_attr] ||= []
           # we have to make a new object to remove the unique entry,
-          # because deleting it directly from the original object (val) would result into deleting the verification forever
-          new_val = HashValidator::Validations::Multiple.new(val.validations.reject{|v| v == 'unique'})
+          # because deleting it directly from the original object
+          # (val) would result into deleting the verification forever
+          new_val = HashValidator::Validations::Multiple.new(val.validations.reject { |v| v == 'unique' })
           # return the value
           val.validations.blank? ? nil : [val_attr, new_val]
         elsif val.is_a?(String) && val == 'unique'
@@ -36,7 +41,7 @@ class HashyArrayValidator < ActiveModel::EachValidator
 
     # force all array entries to have string keys
     # discard keys that do not have validators
-    value = value.map{ |e| e.stringify_keys.slice(*validations.keys) }
+    value = value.map { |e| e.stringify_keys.slice(*validations.keys) }
 
     # we validate each object in the array
     value.each do |t|
@@ -46,7 +51,7 @@ class HashyArrayValidator < ActiveModel::EachValidator
       end
 
       # keep track of unique values and add error if needed
-      unique_attrs.keys.each do |unique_attr|
+      unique_attrs.each_key do |unique_attr|
         if unique_attrs[unique_attr].include?(t[unique_attr])
           record.errors.add(attribute, "'#{unique_attr}' not unique")
         else
@@ -57,7 +62,7 @@ class HashyArrayValidator < ActiveModel::EachValidator
       # use default hash validator
       validator = HashValidator.validate(t, validations)
       unless validator.valid?
-        validator.errors.each { |k,v| record.errors.add(attribute, "'#{k.to_s}' #{v}") }
+        validator.errors.each { |k, v| record.errors.add(attribute, "'#{k}' #{v}") }
       end
     end
 
@@ -66,11 +71,12 @@ class HashyArrayValidator < ActiveModel::EachValidator
     record.send("#{attribute}=", value)
   end
 
-  private
+private
 
   def get_boolean_value(value)
-    return true if value == true || value == 'true'
-    return false if value == false || value == 'false'
+    return true if [true, 'true'].include?(value)
+    return false if [false, 'false'].include?(value)
+
     nil
   end
 end
