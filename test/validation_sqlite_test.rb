@@ -1,6 +1,5 @@
 require 'simplecov'
 SimpleCov.start
-require 'active_record'
 require 'minitest/autorun'
 require_relative '../lib/hashy_validator'
 
