@@ -8,7 +8,6 @@
 HashyValidator is a custom Ruby on Rails validator designed to validate an array of hashes based on [HashValidator](https://github.com/jamesbrooks/hash_validator) criteria but also the following new criteria:
 - `unique`: A value within each hash that has to be unique across the whole array
 
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -16,8 +15,6 @@ Add this line to your application's Gemfile:
 ```ruby
 gem 'hashy_validator'
 ```
-
-<b>THIS GEM IS NOT READY FOR PRODUCTION YET!</b>
 
 And then execute:
 
