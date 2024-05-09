@@ -54,7 +54,7 @@ class Item < ActiveRecord::Base
     hashy_array: {
       active: HashValidator.multiple("required", "boolean"),
     },
-    if: ->(item) { item.quantity > 1 }
+    if: ->(item) { self.quantity > 1 }
 
   attribute :quantity, :integer
 end
@@ -89,14 +89,14 @@ class HashyArrayValidationTest < Minitest::Test
   end
 
   def test_valid_hashy_with_condition_returns_success
-    item = Item.new(name: "Go Pro", quantity: 1, metas: "")
+    item = Item.new(name: "Go Pro", quantity: 1, metas: JSON.generate([{}]))
 
     assert(item.valid?)
   end
 
   def test_valid_hashy_with_condition_returns_fail
-    item = Item.new(name: "Go Pro", quantity: 2, metas: "")
-    puts item.valid?
+    item = Item.new(name: "Go Pro", quantity: 2, metas: JSON.generate([{}]))
+
     refute(item.valid?)
   end
 
