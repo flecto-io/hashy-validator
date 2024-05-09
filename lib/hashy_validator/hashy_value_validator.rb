@@ -16,7 +16,7 @@ class HashyValueValidator
 
   attr_reader :value, :reason
 
-private
+  private
 
   def check_parse_value
     @value = JSON.parse(@value) if @value.is_a?(String)
