@@ -1,3 +1,6 @@
+inherit_gem:
+  rubocop-shopify: rubocop.yml
+
 AllCops:
   Include:
     - Rakefile
@@ -6,62 +9,7 @@ AllCops:
   Exclude:
     - hashy_validator.gemspec
     - vendor/**/*
+    - Rakefile.rb
 
-Documentation:
+Metrics/MethodLength:
   Enabled: false
-
-Encoding:
-  Enabled: false
-
-LineLength:
-  Max: 120
-
-AccessModifierIndentation:
-  EnforcedStyle: outdent
-
-IfUnlessModifier:
-  Enabled: false
-
-CaseIndentation:
-  EnforcedStyle: case
-  IndentOneStep: true
-
-MethodLength:
-  CountComments: false
-  Max: 20
-
-SignalException:
-  Enabled: false
-
-ColonMethodCall:
-  Enabled: false
-
-AsciiComments:
-  Enabled: false
-
-RegexpLiteral:
-  Enabled: false
-
-AssignmentInCondition:
-  Enabled: false
-
-ParameterLists:
-  CountKeywordArgs: false
-
-SingleLineBlockParams:
-  Methods:
-    - reduce:
-        - memo
-        - item
-
-Metrics/AbcSize:
-  Enabled: false
-
-Style/CollectionMethods:
-  Enabled: true
-
-Style/SymbolArray:
-  Enabled: true
-
-Style/ExtraSpacing:
-  Enabled: true

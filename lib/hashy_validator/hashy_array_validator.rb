@@ -17,20 +17,20 @@ class HashyArrayValidator < ActiveModel::EachValidator
       # force validator keys to be strings
       options.stringify_keys.map do |val_attr, val|
         is_multiple = val.is_a?(HashValidator::Validations::Multiple)
-        if (is_multiple && val.validations.include?('boolean')) || (val.is_a?(String) && val == 'boolean')
+        if (is_multiple && val.validations.include?("boolean")) || (val.is_a?(String) && val == "boolean")
           boolean_attrs << val_attr
           [val_attr, val]
-        elsif is_multiple && val.validations.include?('unique')
+        elsif is_multiple && val.validations.include?("unique")
           # if unique key present, then remove that entry
           # (since its not from HashValidator standard) and keep its history
           unique_attrs[val_attr] ||= []
           # we have to make a new object to remove the unique entry,
           # because deleting it directly from the original object
           # (val) would result into deleting the verification forever
-          new_val = HashValidator::Validations::Multiple.new(val.validations.reject { |v| v == 'unique' })
+          new_val = HashValidator::Validations::Multiple.new(val.validations.reject { |v| v == "unique" })
           # return the value
           val.validations.blank? ? nil : [val_attr, new_val]
-        elsif val.is_a?(String) && val == 'unique'
+        elsif val.is_a?(String) && val == "unique"
           # same as above but substring
           unique_attrs[val_attr] ||= []
           nil
@@ -71,11 +71,11 @@ class HashyArrayValidator < ActiveModel::EachValidator
     record.send("#{attribute}=", value)
   end
 
-private
+  private
 
   def get_boolean_value(value)
-    return true if [true, 'true'].include?(value)
-    return false if [false, 'false'].include?(value)
+    return true if [true, "true"].include?(value)
+    return false if [false, "false"].include?(value)
 
     nil
   end

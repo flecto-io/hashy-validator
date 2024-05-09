@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency 'rake', '~> 13.1.0'
     spec.add_development_dependency 'simplecov', '0.17.1'
     spec.add_development_dependency 'rubocop', '~> 1.59'
+    spec.add_development_dependency 'rubocop-shopify', '~> 2.14'
 
     if Gem::Version.new(RUBY_VERSION) < Gem::Version.new("3")
         spec.add_development_dependency 'minitest', '>= 5.15.0', '< 5.16'
