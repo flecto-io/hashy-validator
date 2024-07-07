@@ -39,8 +39,8 @@ To leverage HashyValidator in your Rails model, follow these steps:
    ```ruby
    class YourModel < ApplicationRecord
      validates :pricing, hashy_array: {
-       minutes: HashValidator.multiple('required', 'integer', 'unique'),
-       price_cents: HashValidator.multiple('required', 'integer')
+       minutes: HashValidator.multiple('integer', 'unique'),
+       price_cents: HashValidator.multiple('integer')
      }
    end
    ```
