@@ -47,6 +47,12 @@ To leverage HashyValidator in your Rails model, follow these steps:
    
    Customize each entry validators according to [HashValidator](https://github.com/jamesbrooks/hash_validator) criteria
 
+# Testing
+
+```bash
+rake test
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome. This project is intended to be a safe, welcoming space for collaboration. To ease up contribution we provide a VSCode _devcontainer_ to run the project in a container.
