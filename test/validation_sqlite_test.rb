@@ -34,7 +34,8 @@ end
 class Profile < ActiveRecord::Base
   validates :name, presence: true
   validates :notifications, hashy_array: {
-    type: HashValidator.multiple("required", "string", "unique"),
+    type: HashValidator.multiple("string", "unique"),
+    header: HashValidator::Validations::Optional.new("string"),
   }
 end
 
@@ -42,9 +43,9 @@ class Product < ActiveRecord::Base
   validates :name, presence: true
   validates :discount_by_quantity, hashy_array: {
     uuid: "unique",
-    quantity: HashValidator.multiple("required", "numeric"),
-    price: HashValidator.multiple("required", "numeric"),
-    active: HashValidator.multiple("required", "boolean"),
+    quantity: HashValidator.multiple("numeric"),
+    price: HashValidator.multiple("numeric"),
+    active: HashValidator.multiple("boolean"),
   }
 end
 
@@ -52,7 +53,7 @@ class Item < ActiveRecord::Base
   validates :name, presence: true
   validates :metas,
     hashy_array: {
-      active: HashValidator.multiple("required", "boolean"),
+      active: HashValidator.multiple("boolean"),
     },
     if: ->(item) { self.quantity > 1 }
 
@@ -66,6 +67,7 @@ class HashyArrayValidationTest < Minitest::Test
       [
         {
           type: "something",
+          header: "something header"
         },
       ],
     ))

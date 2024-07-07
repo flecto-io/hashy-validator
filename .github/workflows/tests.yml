@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
 
       - name: Install Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1.4
+          ruby-version: '3.2'
 
       - name: Setup Code Climate test-reporter
         run: |
@@ -28,7 +28,7 @@ jobs:
       - name: Build and test with RSpec
         run: |
           gem install bundler
-          bundle install --jobs 4 --retry 3
+          bundle install --retry 3
           rake test
       - name: Publish code coverage
         run: |
