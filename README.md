@@ -53,6 +53,21 @@ To leverage HashyValidator in your Rails model, follow these steps:
 rake test
 ```
 
+# Publish
+
+How should I write my commits?
+Release Please assumes you are using Conventional Commit messages.
+
+The most important prefixes you should have in mind are:
+
+fix: which represents bug fixes, and correlates to a SemVer patch.
+feat: which represents a new feature, and correlates to a SemVer minor.
+feat!:, or fix!:, refactor!:, etc., which represent a breaking change (indicated by the !) and will result in a SemVer major.
+
+Documentation: 
+
+https://github.com/googleapis/release-please-action/tree/v4
+
 ## Contributing
 
 Bug reports and pull requests are welcome. This project is intended to be a safe, welcoming space for collaboration. To ease up contribution we provide a VSCode _devcontainer_ to run the project in a container.
