@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0](https://www.github.com/flecto-io/hashy-validator/compare/v0.1.3...v0.2.0) (2024-08-24)
+
+
+### Features
+
+* allow activerecord dependencies ([991a61b](https://www.github.com/flecto-io/hashy-validator/commit/991a61b0f37bf1effb3181d2cf4e3bfd973ea976))
+* allow activerecord dependencies ([9b73b82](https://www.github.com/flecto-io/hashy-validator/commit/9b73b8288ddd62f9331e5538d396ee7cca4e4a01))
+
 ### [0.1.3](https://www.github.com/flecto-io/hashy-validator/compare/v0.1.3...v0.1.4) (2024-08-24)
 
 ### Changes
