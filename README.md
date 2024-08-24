@@ -55,7 +55,8 @@ rake test
 
 # Publish
 
-How should I write my commits?
+## How should I write my commits?
+
 Release Please assumes you are using Conventional Commit messages.
 
 The most important prefixes you should have in mind are:
