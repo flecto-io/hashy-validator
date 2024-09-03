@@ -57,6 +57,15 @@ class HashyArrayValidationTest < Minitest::Test
     assert(customer.valid?)
   end
 
+
+  def test_missing_optional_attribute_on_hashy_object_returns_success
+    customer = Customer.new(age: 23, custom: JSON.generate({
+      quantity: 20
+    }))
+
+    assert(customer.valid?)
+  end
+
   # =================================
   # Failures cases
   # =================================
@@ -137,5 +146,13 @@ class HashyArrayValidationTest < Minitest::Test
     ])
 
     refute(profile.valid?)
+  end
+
+  def test_invalid_hashy_object_returns_error
+    customer = Customer.new(age: 23, custom: JSON.generate({
+      name: "John Doe",
+    }))
+
+    refute(customer.valid?)
   end
 end
