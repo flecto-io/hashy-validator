@@ -66,6 +66,12 @@ class HashyArrayValidationTest < Minitest::Test
     assert(customer.valid?)
   end
 
+  def test_empty_hashy_object_returns_success
+    customer = Customer.new(age: 23, custom: JSON.generate({}))
+
+    assert(customer.valid?)
+  end
+
   # =================================
   # Failures cases
   # =================================
