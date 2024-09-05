@@ -27,6 +27,12 @@ class HashyArrayValidationTest < Minitest::Test
     assert(profile.valid?)
   end
 
+  def test_ignore_empty_array_returns_success
+    profile = Profile.new(name: "John Doe", notifications: JSON.generate([]))
+
+    assert(profile.valid?)
+  end
+
   def test_valid_numeric_hashy_returns_success
     product = Product.new(name: "IPhone", discount_by_quantity: JSON.generate(
       [
