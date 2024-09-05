@@ -5,7 +5,7 @@ class HashyObjectValidator < ActiveModel::EachValidator
     instance_value = HashyValueValidator.new(value, options)
 
     # Do not validate empty hash
-    return if instance_value.value.keys.empty?
+    return if instance_value.value.blank?
 
     unless instance_value.valid?
       record.errors.add(attribute, instance_value.reason)
@@ -21,19 +21,9 @@ class HashyObjectValidator < ActiveModel::EachValidator
     # discard keys that do not have validators
     value = instance_value.value.stringify_keys.slice(*instance_value.validations.keys)
 
-    # we validate each object in the array
     # if boolean found as any of the validations we force value to boolean - if present
     instance_value.boolean_attrs.each do |boolean_attr|
-      value[boolean_attr] = HashyValueValidator.get_boolean_value(t[boolean_attr]) if value.key?(boolean_attr)
-    end
-
-    # keep track of unique values and add error if needed
-    instance_value.unique_attrs.each_key do |unique_attr|
-      if instance_value.unique_attrs[unique_attr].include?(value[unique_attr])
-        record.errors.add(attribute, "'#{unique_attr}' not unique")
-      else
-        instance_value.unique_attrs[unique_attr] << t[unique_attr]
-      end
+      value[boolean_attr] = HashyValueValidator.get_boolean_value(value[boolean_attr]) if value.key?(boolean_attr)
     end
 
     # use default hash validator
