@@ -77,6 +77,18 @@ class HashyArrayValidationTest < Minitest::Test
     assert(customer.valid?)
   end
 
+  def test_ignore_nil_hashy_array_returns_success
+    profile = Profile.new(name: "John Doe", notifications: nil)
+
+    assert(profile.valid?)
+  end
+
+  def test_ignore_nil_hashy_object_returns_success
+    customer = Customer.new(age: 23, custom: nil)
+
+    assert(customer.valid?)
+  end
+
   # =================================
   # Failures cases
   # =================================
