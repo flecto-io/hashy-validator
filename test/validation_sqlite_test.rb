@@ -100,6 +100,15 @@ class HashyArrayValidationTest < Minitest::Test
     assert(customer.valid?)
   end
 
+  def test_valid_hashy_object_passing_boolean_as_string_returns_success
+    customer = Customer.new(age: 23, custom: JSON.generate({
+      quantity: 1,
+      active: "true",
+    }))
+
+    assert(customer.valid?)
+  end
+
   # =================================
   # Failures cases
   # =================================
@@ -200,6 +209,15 @@ class HashyArrayValidationTest < Minitest::Test
 
   def test_invalid_hashy_object_passing_not_valid_parse_returns_error
     customer = Customer.new(age: 23, custom: "not a hash")
+
+    refute(customer.valid?)
+  end
+
+  def test_hashy_object_passing_invalid_boolean_returns_success
+    customer = Customer.new(age: 23, custom: JSON.generate({
+      quantity: 1,
+      active: "invalid",
+    }))
 
     refute(customer.valid?)
   end
