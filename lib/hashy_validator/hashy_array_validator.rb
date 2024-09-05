@@ -8,7 +8,7 @@ class HashyArrayValidator < ActiveModel::EachValidator
       record.errors.add(attribute, instance_value.reason)
       return false
     end
-    
+
     unless instance_value.value.is_a?(Array)
       record.errors.add(attribute, :not_an_array)
       return false

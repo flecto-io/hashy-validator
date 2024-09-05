@@ -13,3 +13,6 @@ AllCops:
 
 Metrics/MethodLength:
   Enabled: false
+
+Style/ClassMethodsDefinitions:
+  Enabled: false

@@ -4,22 +4,22 @@ require "simplecov"
 SimpleCov.start
 require "minitest/autorun"
 require_relative "../lib/hashy_validator"
-require_relative "./database/sqlite"
-require_relative "./model/samples"
-require 'pry'
+require_relative "database/sqlite"
+require_relative "model/samples"
+require "pry"
 
 # I am using JSON.generate is because sqlite3 does not have the jsonb column type
 class HashyArrayValidationTest < Minitest::Test
   # =================================
   # Success cases
   # =================================
-  
+
   def test_valid_hashy_returns_success
     profile = Profile.new(name: "John Doe", notifications: JSON.generate(
       [
         {
           type: "something",
-          header: "something header"
+          header: "something header",
         },
       ],
     ))
@@ -57,16 +57,15 @@ class HashyArrayValidationTest < Minitest::Test
   def test_valid_hashy_object_returns_success
     customer = Customer.new(age: 23, custom: JSON.generate({
       name: "John Doe",
-      quantity: 20
+      quantity: 20,
     }))
 
     assert(customer.valid?)
   end
 
-
   def test_missing_optional_attribute_on_hashy_object_returns_success
     customer = Customer.new(age: 23, custom: JSON.generate({
-      quantity: 20
+      quantity: 20,
     }))
 
     assert(customer.valid?)
@@ -81,7 +80,7 @@ class HashyArrayValidationTest < Minitest::Test
   # =================================
   # Failures cases
   # =================================
-  
+
   def test_valid_hashy_with_condition_returns_fail
     item = Item.new(name: "Go Pro", quantity: 2, metas: JSON.generate([{}]))
 

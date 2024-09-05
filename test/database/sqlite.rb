@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Create database
 conn = { adapter: "sqlite3", database: ":memory:" }
 ActiveRecord::Base.establish_connection(conn)

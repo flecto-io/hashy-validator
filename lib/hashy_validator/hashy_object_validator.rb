@@ -3,7 +3,7 @@
 class HashyObjectValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     instance_value = HashyValueValidator.new(value, options)
-    
+
     # Do not validate empty hash
     return if instance_value.value.keys.empty?
 
@@ -11,7 +11,7 @@ class HashyObjectValidator < ActiveModel::EachValidator
       record.errors.add(attribute, instance_value.reason)
       return false
     end
-    
+
     if instance_value.value.is_a?(Array)
       record.errors.add(attribute, :not_an_object)
       return false

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Profile < ActiveRecord::Base
   validates :name, presence: true
   validates :notifications, hashy_array: {
@@ -22,7 +24,7 @@ class Item < ActiveRecord::Base
     hashy_array: {
       active: HashValidator.multiple("boolean"),
     },
-    if: ->(item) { self.quantity > 1 }
+    if: ->(_item) { quantity > 1 }
 
   attribute :quantity, :integer
 end
