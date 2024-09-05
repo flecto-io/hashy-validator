@@ -34,5 +34,6 @@ class Customer < ActiveRecord::Base
   validates :custom, hashy_object: {
     name: HashValidator::Validations::Optional.new("string"),
     quantity: HashValidator.multiple("numeric"),
+    active: "boolean",
   }
 end

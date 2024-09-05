@@ -58,6 +58,7 @@ class HashyArrayValidationTest < Minitest::Test
     customer = Customer.new(age: 23, custom: JSON.generate({
       name: "John Doe",
       quantity: 20,
+      active: true,
     }))
 
     assert(customer.valid?)
@@ -66,6 +67,7 @@ class HashyArrayValidationTest < Minitest::Test
   def test_missing_optional_attribute_on_hashy_object_returns_success
     customer = Customer.new(age: 23, custom: JSON.generate({
       quantity: 20,
+      active: true,
     }))
 
     assert(customer.valid?)
@@ -85,6 +87,15 @@ class HashyArrayValidationTest < Minitest::Test
 
   def test_ignore_nil_hashy_object_returns_success
     customer = Customer.new(age: 23, custom: nil)
+
+    assert(customer.valid?)
+  end
+
+  def test_valid_hashy_object_passing_boolean_returns_success
+    customer = Customer.new(age: 23, custom: JSON.generate({
+      quantity: 1,
+      active: true,
+    }))
 
     assert(customer.valid?)
   end
@@ -175,6 +186,20 @@ class HashyArrayValidationTest < Minitest::Test
     customer = Customer.new(age: 23, custom: JSON.generate({
       name: "John Doe",
     }))
+
+    refute(customer.valid?)
+  end
+
+  def test_invalid_hashy_object_passing_array_returns_error
+    customer = Customer.new(age: 23, custom: JSON.generate([{
+      name: "John Doe",
+    }]))
+
+    refute(customer.valid?)
+  end
+
+  def test_invalid_hashy_object_passing_not_valid_parse_returns_error
+    customer = Customer.new(age: 23, custom: "not a hash")
 
     refute(customer.valid?)
   end
