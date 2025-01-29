@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    hashy_validator (0.1.2)
-      activerecord (>= 6.0.0, <= 7.2.0)
+    hashy_validator (0.2.0)
+      activerecord
       hash_validator (~> 1.1)
 
 GEM
